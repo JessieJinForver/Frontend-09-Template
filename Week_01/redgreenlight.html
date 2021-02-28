@@ -1,0 +1,77 @@
+<html>
+    <head>  
+        <style>
+            div{
+                width:100px;
+                height:100px;
+                border-radius:50px;
+                background:grey;
+
+            }
+            .red.light{
+                background:red;
+            }
+            .green.light{
+                background:green;
+            }
+            .yellow.light{
+                background:yellow;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="red light">
+        </div>
+        <div class="green light">
+        </div>
+        <div class="yellow light">
+        </div>
+    </body>
+    <script>
+         function green(){
+           let lights =  document.getElementsByTagName('div')
+           for(let i=0;i<3;i++){
+               lights[i].classList.remove('light')
+           }
+           document.getElementsByClassName('green')[0].classList.add('light')
+           console.log('green')
+         }
+         function red(){
+
+            let lights =  document.getElementsByTagName('div')
+           for(let i=0;i<3;i++){
+               lights[i].classList.remove('light')
+           }
+           document.getElementsByClassName('red')[0].classList.add('light')
+           console.log('red')
+
+         }
+         function yellow(){
+
+            let lights =  document.getElementsByTagName('div')
+           for(let i=0;i<3;i++){
+               lights[i].classList.remove('light')
+           }
+           document.getElementsByClassName('yellow')[0].classList.add('light')
+           console.log('yellow')
+
+         }
+         function sleep(t){
+            return new Promise((resolve,reject) =>{
+                 setTimeout(resolve,t)
+             })
+         }
+        function go(){
+            green()
+            sleep(2000).then(()=>{
+                console.log('1')
+                yellow()
+                return sleep(1000)
+            }).then(()=>{
+                console.log('1')
+                red()
+                return sleep(3000)
+            }).then(go)
+        }
+    </script>
+</html>
