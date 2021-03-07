@@ -55,30 +55,46 @@
         })
         document.addEventListener('contextmenu',e=>e.preventDefault())
 
-        function path(map,start,end) {
-            var queue = [start]
-            function insert(x,y){
+        async function findPath(map,start,end) {
+            let queue = [start]
+            let table = Object.create(map)
+
+            async function insert(x,y,pre){
                 if(x<0||x>=100||y<0||y>=100){
                     return;
                 }
-                if(map[y*100 +x]){
+                if(table[y*100 +x]){
                     return;
                 }
-                map[y*100 +x] =2
+                await sleep(1)
+                container.children[y*100+x].style.backgroundColor='lightgreen'
+                table[y*100+x] = pre
                 queue.push([x,y])
             }
             while(queue.length){
                 let [x,y] = queue.shift();
-                console.log(x,y)
                 if(x === end[0] && y === end[1]){
-                    return [x,y];
+                    let path =[];
+                    while(x != start[0]|| y!=start[1]){
+                        path.push(map[y*100+x])
+                        console.log(111,x,y,path)
+                        [x,y] = table[y*100+x]
+                        await sleep(1000)
+                        container.children[y*100 +x].style.backgroundColor='purple';
+                    }
+                    return path;
                 }
-                insert(x-1,y);
-                insert(x,y-1);
-                insert(x+1,y);
-                insert(x,y+1);
+                await insert(x-1,y,[x,y]);
+                await insert(x,y-1,[x,y]);
+                await insert(x+1,y,[x,y]);
+                await insert(x,y+1,[x,y]);
             }
             return null;
+        }
+        function sleep(t){
+            return new Promise(function(resove,reject){
+                setTimeout(resove,t)
+            })
         }
     </script>
     </body>
