@@ -20,18 +20,23 @@
 
         </div>
 
-    <button onclick="localStorage['map'] = JSON.stringify(map)">save</button>
+    <button onclick="saveMap()">save</button>
     <script>
         let map = localStorage['map'] ?JSON.parse(localStorage['map']) : Array(10000).fill(0)
         let container = document.getElementById('container')
         let mousedown = false
         let clear = false
-        for(y=0;y<100;y++){
-            for(x=0;x<100;x++){
+        var saveMap = function(){
+            console.log(map)
+            localStorage['map'] = JSON.stringify(map)
+        }
+        for(let y=0;y<100;y++){
+            for(let x=0;x<100;x++){
                let cell =  document.createElement('span');
                cell.classList.add('cell')
                if(map[100*y +x] ==1){
                    cell.style.backgroundColor = 'black';
+                   map[100*y+x] = 1;
                }
                cell.addEventListener('mousemove',()=>{
                     if(mousedown){
@@ -41,6 +46,7 @@
                         }else{
                             cell.style.backgroundColor = 'black';
                             map[100*y+x] = 1;
+                            console.log(x,y)
                         }
                     }
                })
@@ -70,24 +76,33 @@
                 container.children[y*100+x].style.backgroundColor='lightgreen'
                 table[y*100+x] = pre
                 queue.push([x,y])
+                console.log(333,queue)
             }
             while(queue.length){
                 let [x,y] = queue.shift();
+                
+                        console.log(111,'x',x,'y',y,'ok')
                 if(x === end[0] && y === end[1]){
                     let path =[];
                     while(x != start[0]|| y!=start[1]){
                         path.push(map[y*100+x])
                         console.log(111,x,y,path)
                         [x,y] = table[y*100+x]
-                        await sleep(1000)
+                        await sleep(30)
                         container.children[y*100 +x].style.backgroundColor='purple';
                     }
                     return path;
                 }
+                console.log(1000,queue)
                 await insert(x-1,y,[x,y]);
                 await insert(x,y-1,[x,y]);
                 await insert(x+1,y,[x,y]);
                 await insert(x,y+1,[x,y]);
+            
+                await insert(x-1,y-1,[x,y]);
+                await insert(x+1,y-1,[x,y]);
+                await insert(x-1,y+1,[x,y]);
+                await insert(x+1,y+1,[x,y]);
             }
             return null;
         }
