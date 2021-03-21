@@ -1,0 +1,34 @@
+<script>
+    let $ = Symbol('$');
+    class Trie{
+        constructor(){
+            this.root = Object.create(null)
+        }
+        insert(word){
+            let node = this.root
+            for(let c of word){
+                if(!node[c]){
+                    node[c] = Object.create(null)
+                }
+                node =node[c]
+            }
+            if(!($ in node)){
+                node[$] = 0
+            }
+            node[$]++
+            console.log(this.root)
+        }
+    }
+    function randWord(length){
+        var s=''
+        for(let i=0;i<length;i++){
+            s='ffwer'
+        }
+        console.log(s)
+        return s
+    }
+    let trie = new Trie()
+    for(let i=0;i<5;i++){
+        trie.insert(randWord(3))
+    }
+</script>
